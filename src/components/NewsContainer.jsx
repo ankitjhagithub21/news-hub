@@ -1,18 +1,18 @@
 import React from 'react'
 import News from './News'
 
-const NewsContainer = ({articles}) => {
- 
+const NewsContainer = ({ articles }) => {
+
     return (
         <section>
-            <div className="container  py-24 mx-auto">
-
+            <div className="container mx-auto">
+                    <h2 className='text-center  text-3xl font-bold mb-5'>Latest News</h2>
                 <div className="flex flex-wrap">
                     {
                         articles
-                            .filter(article => article.urlToImage && article.author && article.title)
-                            .map(article => (
-                               <News key={article.url} image={article.urlToImage} author={article.author} title={article.title} url={article.url}/>
+                            .filter(article => article.image_url && article.title)
+                            .map((article,index) => (
+                                <News key={index} image={article.image_url} title={article.title} url={article.link} />
                             ))
 
                     }
