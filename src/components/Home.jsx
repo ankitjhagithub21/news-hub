@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import NewsContainer from './NewsContainer';
 import SearchBar from './SearchBar';
+import Loader from './Loader';
+import Category from './Category';
 
 const Home = () => {
     const apikey = import.meta.env.VITE_API_KEY;
-    const [query, setQuery] = useState('india');
+    const [query, setQuery] = useState('');
+    const [category,setCategory] = useState(null)
     const [articles, setArticles] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     const getNews = async () => {
+        setLoading(true)
         try {
-            const res = await fetch(`https://newsdata.io/api/1/news?apikey=${apikey}&q=${query}&language=en`);
+            const res = await fetch(`https://newsdata.io/api/1/news?apikey=${apikey}&q=${query!='' ? query : 'india'}&language=en&category=${category==null ? 'top': `${category}`}`);
             if (!res.ok) {
                 throw new Error('Server response not ok');
             }
@@ -28,7 +32,7 @@ const Home = () => {
 
     useEffect(() => {
         getNews();
-    }, []);
+    }, [category]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,12 +42,13 @@ const Home = () => {
     return (
         <>
             <SearchBar query={query} setQuery={setQuery} handleSubmit={handleSubmit} />
+            <Category setCategory={setCategory}/>
             {loading ? (
-                <p>Loading</p>
+               <Loader/>
             ) : error || !articles || articles.length==0 ? (
-                <p className='text-center text-2xl'>News not found</p>
+                <div className='text-center text-2xl h-[50vh]'>News not found</div>
             ) : (
-                <NewsContainer articles={articles} />
+                <NewsContainer articles={articles} category={category} />
             )}
         </>
     );

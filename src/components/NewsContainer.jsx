@@ -1,12 +1,12 @@
 import React from 'react'
 import News from './News'
 
-const NewsContainer = ({ articles }) => {
+const NewsContainer = ({ category, articles }) => {
 
     return (
         <section>
             <div className="container mx-auto">
-                    <h2 className='text-center  text-3xl font-bold mb-5'>Latest News</h2>
+                    <h2 className='text-center  text-3xl font-bold mb-5'>{category ? category : "Latest News"}</h2>
                 <div className="flex flex-wrap">
                     {
                         articles
